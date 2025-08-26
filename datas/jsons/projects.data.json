@@ -1,0 +1,17 @@
+{
+    "projects": [
+        {
+            "id": "",
+            "fk": "",
+            "title": "",
+            "slug": "",
+            "description": "",
+            "coverImage": "",
+            "medias": [],
+            "gitLink": "",
+            "prodLink": "",
+            "tags": [],
+            "priority": 0
+        }
+    ]
+}

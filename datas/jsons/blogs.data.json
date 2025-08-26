@@ -1,0 +1,17 @@
+{
+    "blogs": [
+        {
+            "id": 1,
+            "fk": 1,
+            "title": "Blog 1",
+            "slug": "",
+            "excerpt": "Artificial Intelligence is rapidly reshaping the world around us, powering everything from smart assistants to advanced medical ...",
+            "content": "",
+            "jsonModel": "",
+            "coverImage": "/blog-img1.avif",
+            "medias": [],
+            "href": "/blog/1",
+            "priority": 1
+        }
+    ]
+}

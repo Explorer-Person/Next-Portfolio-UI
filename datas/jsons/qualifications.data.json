@@ -1,0 +1,14 @@
+{
+    "qualifications": [
+        {
+            "id": 1,
+            "fk": 1,
+            "type": "cert",
+            "title": "Node.js Knowledge Expertise",
+            "org": "Coursera",
+            "year": "2024",
+            "url": "https://coursera.org/...",
+            "logo": ""
+        }
+    ]
+}

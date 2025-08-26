@@ -1,0 +1,16 @@
+{
+    "contributions": {
+        "docs": [
+            {
+                "id": 1,
+                "fk": 1,
+                "title": "Open Source Project 1",
+                "slug": "",
+                "excerpt": "Brief description of what this project does and why it’s useful.",
+                "img": "/images/project1.png",
+                "href": "https://github.com/youruser/project1",
+                "priority": 1
+            }
+        ]
+    }
+}

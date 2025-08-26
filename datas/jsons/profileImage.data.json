@@ -1,0 +1,11 @@
+{
+    "profileImage": {
+        "id": 0,
+        "fk": 0,
+        "src": "",
+        "alt": "",
+        "width": 0,
+        "height": 0,
+        "className": ""
+    }
+}

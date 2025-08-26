@@ -1,0 +1,9 @@
+export { default as contactsData } from "./contacts.data.json";
+export { default as contributionsData } from "./contributions.data.json";
+export { default as heroData } from "./hero.data.json";
+export { default as profileImageData } from "./profileImage.data.json";
+export { default as projectsData } from "./projects.data.json";
+export { default as qualificationsData } from "./qualifications.data.json";
+export { default as socialsData } from "./socials.data.json";
+export { default as techStackData } from "./techStack.data.json";
+export { default as blogsData } from "./blogs.data.json";

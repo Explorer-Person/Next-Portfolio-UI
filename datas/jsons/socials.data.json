@@ -1,0 +1,12 @@
+{
+    "socials": [
+        {
+            "id": 1,
+            "fk": "",
+            "platform": "",
+            "icon": "",
+            "url": "",
+            "size": 60
+        }
+    ]
+}
