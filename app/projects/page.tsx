@@ -4,6 +4,9 @@
 
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useAuth } from "@/components/AuthContext";
+import { motion } from "framer-motion";
+import { getSectionAnim } from "@/utils/animation";
 
 
 type Project = {
@@ -107,9 +110,9 @@ export default function ProjectsPage() {
 
 
     return (
-        <main className="projects-container min-h-screen">
-            <section className="mx-auto max-w-6xl px-4 py-10">
-                <header className="mb-6 flex items-end justify-between gap-4">
+        <main className="projects-container h-full min-h-screen">
+            <section className="mx-auto max-w-7xl px-4 py-10">
+                <motion.header {...getSectionAnim({ direction: "", delay: 0.1 })} className="mb-6 flex items-end justify-between gap-4">
                     <div>
                         <h1 className="text-3xl font-extrabold tracking-tight">Projects</h1>
                         <p className="opacity-70">Explore my recent work — click a card to see more.</p>
@@ -122,7 +125,7 @@ export default function ProjectsPage() {
                             <span className="accent-chip">Specialized: {selected.title}</span>
                         )}
                     </div>
-                </header>
+                </motion.header>
 
                 {/* Loading / Error */}
                 {loading && (
@@ -139,7 +142,7 @@ export default function ProjectsPage() {
 
                 {/* Extended mode (grid) */}
                 {!loading && !err && extended && (
-                    <div className="flex">
+                    <div className="flex mt-[5%] flex-wrap gap-[5%] space-y-[5%]">
                         {projects.map((p) => (
                             <ProjectCard key={p._id} project={p} onOpen={() => setSelected(p)} />
                         ))}
@@ -149,7 +152,7 @@ export default function ProjectsPage() {
 
             {/* Specialized mode (overlay panel) */}
             {selected && (
-                <DetailOverlay project={selected} onClose={() => {setSelected(null); route.push("/projects")}} updateItem={updateItem} deleteItem={deleteItem} />
+                <DetailOverlay project={selected} onClose={() => { setSelected(null); route.push("/projects") }} updateItem={updateItem} deleteItem={deleteItem} />
             )}
         </main>
     );
@@ -158,8 +161,9 @@ export default function ProjectsPage() {
 function ProjectCard({ project, onOpen }: { project: Project; onOpen: () => void }) {
     const cover = toMediaUrl(project.coverImage);
     return (
-        <article
-            className="card group relative w-[50%] overflow-hidden cursor-pointer transition-transform hover:-translate-y-0.5"
+        <motion.article
+            {...getSectionAnim({ direction: "", delay: 0.2 })}
+            className="card group relative w-[45%] overflow-hidden cursor-pointer transition-transform hover:-translate-y-0.5"
             onClick={onOpen}
             role="button"
             aria-label={`Open ${project.title}`}
@@ -184,66 +188,135 @@ function ProjectCard({ project, onOpen }: { project: Project; onOpen: () => void
                     <h3 className="text-lg font-bold text-white">{project.title}</h3>
                 </div>
             </div>
-        </article>
+        </motion.article>
 
     );
 }
 
-function DetailOverlay({ project, onClose, updateItem, deleteItem }: Readonly<{ project: Project; onClose: () => void ; updateItem: (e: any) => void; deleteItem: (e: any) => void}>) {
+function DetailOverlay({ project, onClose, updateItem, deleteItem }: Readonly<{ project: Project; onClose: () => void; updateItem: (e: any) => void; deleteItem: (e: any) => void }>) {
     const cover = toMediaUrl(project.coverImage);
     const medias = (project.medias ?? []).map(toMediaUrl);
+    const { isAuthed } = useAuth();
 
+    const slides = useMemo(
+        () => [cover, ...medias].filter(Boolean) as string[],
+        [cover, medias]
+    );
+    const [slideIndex, setSlideIndex] = useState(0);
+
+    const go = useCallback((next: number) => {
+        if (!slides.length) return;
+        const n = (next + slides.length) % slides.length; // wrap
+        setSlideIndex(n);
+    }, [slides.length]);
+
+    const prev = useCallback(() => go(slideIndex - 1), [go, slideIndex]);
+    const next = useCallback(() => go(slideIndex + 1), [go, slideIndex]);
+
+    // Arrow keys
+    useEffect(() => {
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === "ArrowLeft") prev();
+            if (e.key === "ArrowRight") next();
+        };
+        window.addEventListener("keydown", onKey);
+        return () => window.removeEventListener("keydown", onKey);
+    }, [prev, next]);
 
     return (
-        <div
-            className="fixed inset-0 z-50 bg-[rgba(0,0,0,0.55)] backdrop-blur-sm flex items-center justify-center"
+        <motion.div
+        {...getSectionAnim({ direction: "up", delay: 0.1 })}
+            className="fixed inset-0 z-50 bg-white/50
+                flex items-center justify-center mc-15"
             aria-modal="true"
             role="dialog"
         >
-            <div className="mx-auto mt-10 relative bottom-5  w-[min(100%-1.25rem,1000px)]">
-                <div className="card overflow-hidden">
+            <div className="w-full max-w-5xl">
+                <div className="card overflow-hidden !bg-white text-stone-900 rounded-2xl shadow-xl">
                     {/* Header */}
-                    <div className="flex items-center justify-between gap-3 p-4">
+                    <div className="flex items-center justify-between gap-3 p-4 border-b border-stone-200">
                         <div className="min-w-0">
-                            <h2 className="text-2xl font-extrabold leading-tight">{project.title}</h2>
+                            <h2 className="text-2xl leading-tight">{project.title}</h2>
                             {project.slug && (
                                 <div className="opacity-70 text-xs">/{project.slug}</div>
                             )}
                         </div>
                         <div className="flex items-center gap-2">
                             {Number.isFinite(project.priority) && (
-                                <span className="accent-chip">Priority {project.priority}</span>
+                                <span className="rounded-full bg-stone-100 px-3 py-1 text-xs font-medium text-stone-700">
+                                    Priority {project.priority}
+                                </span>
                             )}
-                            <button className="btn" onClick={onClose} aria-label="Close details">Close</button>
+                            <button
+                                className="px-3 py-1.5 rounded-lg bg-stone-200 hover:bg-stone-300 text-stone-800 font-medium transition"
+                                onClick={onClose}
+                                aria-label="Close details"
+                            >
+                                Close
+                            </button>
                         </div>
                     </div>
 
-                    {/* Media rail */}
                     {/* Media rail */}
                     <div className="px-4 pb-4">
-                        <div className="media-rail">
-                            {/* Cover first */}
-                            {cover && (
-                                <div className="relative h-72 w-full">
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img
-                                        src={`/api/media?url=${cover}`}
-                                        alt={`${project.title} cover`}
-                                        className="h-full w-full object-cover"
-                                    />
+                        {slides.length > 0 && (
+                            <div className="relative overflow-hidden rounded-xl">
+                                {/* Track */}
+                                <div
+                                    className="flex transition-transform duration-500 ease-out"
+                                    style={{ transform: `translateX(-${slideIndex * 100}%)` }}
+                                >
+                                    {slides.map((src, i) => (
+                                        <div key={i} className="w-full shrink-0">
+                                            <img
+                                                src={`/api/media?url=${src}`}
+                                                alt={`${project.title} media ${i + 1}`}
+                                                className="h-72 w-full object-cover md:h-[14rem]"
+                                                loading="lazy"
+                                            />
+                                        </div>
+                                    ))}
                                 </div>
-                            )}
-                            {/* Then extra medias */}
-                            {medias.map((m, i) => (
-                                <MediaItem
-                                    key={i}
-                                    src={m}
-                                    title={`${project.title} media ${i + 1}`}
-                                />
-                            ))}
-                        </div>
-                    </div>
 
+                                {/* Left / Right buttons */}
+                                {slides.length > 1 && (
+                                    <>
+                                        <button
+                                            type="button"
+                                            onClick={prev}
+                                            aria-label="Previous image"
+                                            className="absolute left-3 top-1/2 -translate-y-1/2 grid h-10 w-10 place-items-center rounded-full bg-white/90 text-stone-900 shadow hover:bg-white"
+                                        >
+                                            ‹
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={next}
+                                            aria-label="Next image"
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 grid h-10 w-10 place-items-center rounded-full bg-white/90 text-stone-900 shadow hover:bg-white"
+                                        >
+                                            ›
+                                        </button>
+                                    </>
+                                )}
+
+                                {/* Dots */}
+                                {slides.length > 1 && (
+                                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+                                        {slides.map((_, i) => (
+                                            <button
+                                                key={i}
+                                                aria-label={`Go to slide ${i + 1}`}
+                                                onClick={() => setSlideIndex(i)}
+                                                className={`h-2.5 w-2.5 rounded-full transition ${i === slideIndex ? "bg-stone-900" : "bg-stone-300 hover:bg-stone-400"
+                                                    }`}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
 
                     {/* Body */}
                     <div className="grid gap-4 px-4 pb-5 md:grid-cols-3">
@@ -257,10 +330,24 @@ function DetailOverlay({ project, onClose, updateItem, deleteItem }: Readonly<{ 
                             <h3 className="mb-2 text-lg font-bold">Links & meta</h3>
                             <div className="flex flex-wrap gap-2">
                                 {project.prodLink && (
-                                    <a className="btn" href={project.prodLink} target="_blank" rel="noreferrer">Live</a>
+                                    <a
+                                        className="px-4 py-2 rounded-lg bg-stone-800 hover:bg-stone-900 text-white font-medium shadow transition"
+                                        href={project.prodLink}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        Live
+                                    </a>
                                 )}
                                 {project.gitLink && (
-                                    <a className="btn" href={project.gitLink} target="_blank" rel="noreferrer">GitHub</a>
+                                    <a
+                                        className="px-4 py-2 rounded-lg bg-stone-700 hover:bg-stone-800 text-white font-medium shadow transition"
+                                        href={project.gitLink}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        GitHub
+                                    </a>
                                 )}
                             </div>
 
@@ -268,68 +355,58 @@ function DetailOverlay({ project, onClose, updateItem, deleteItem }: Readonly<{ 
                                 <>
                                     <h4 className="mt-4 text-sm font-semibold opacity-80">Tags</h4>
                                     <div className="mt-1 flex flex-wrap gap-1.5">
-                                        {project.tags.map((t, i) => <span key={i} className="tag">#{t}</span>)}
+                                        {project.tags.map((t, i) => (
+                                            <span
+                                                key={i}
+                                                className="px-2 py-1 rounded bg-stone-100 text-stone-700 text-xs font-medium"
+                                            >
+                                                #{t}
+                                            </span>
+                                        ))}
                                     </div>
                                 </>
                             ) : null}
 
                             <div className="mt-4 text-xs opacity-70">
                                 <div>FK: {project.fk}</div>
-                                {project.createdAt && <div>Created: {new Date(project.createdAt).toLocaleString()}</div>}
-                                {project.updatedAt && <div>Updated: {new Date(project.updatedAt).toLocaleString()}</div>}
+                                {project.createdAt && (
+                                    <div>Created: {new Date(project.createdAt).toLocaleString()}</div>
+                                )}
+                                {project.updatedAt && (
+                                    <div>Updated: {new Date(project.updatedAt).toLocaleString()}</div>
+                                )}
                             </div>
                         </div>
                     </div>
 
-                    <div className="flex gap-3 relative bottom-5 left-5">
-                        <button
-                            value={project._id}
-                            onClick={deleteItem}
-                            className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold shadow transition-all duration-200"
-                        >
-                            Delete
-                        </button>
+                    {/* Footer buttons */}
+                    {
+                        isAuthed ? (
+                            <div className="flex gap-3 px-4 pb-5">
+                                <button
+                                    value={project._id}
+                                    onClick={deleteItem}
+                                    className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold shadow transition-all duration-200"
+                                >
+                                    Delete
+                                </button>
 
-                        <button
-                            value={project._id}
-                            onClick={updateItem}
-                            className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow transition-all duration-200"
-                        >
-                            Update
-                        </button>
-                    </div>
-
+                                <button
+                                    value={project._id}
+                                    onClick={updateItem}
+                                    className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow transition-all duration-200"
+                                >
+                                    Update
+                                </button>
+                            </div>
+                        ) : null
+                    }
 
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 }
 
-function MediaItem({ src, title }: { src: string; title: string }) {
-    const isVideo = /\.(mp4|webm|ogg|mov|m4v|avi|mkv)$/i.test(src);
-    if (isVideo) {
-        return (
-            <div className="relative h-72 w-full">
-                {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-                <video
-                    className="h-full w-full object-cover"
-                    src={`/api/media?url=${src}`}
-                    controls
-                    preload="metadata"
-                />
-            </div>
-        );
-    }
-    return (
-        <div className="relative h-72 w-full">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-                src={`/api/media?url=${src}`}
-                alt={title}
-                className="h-full w-full object-cover"
-            />
-        </div>
-    );
-}
+
 

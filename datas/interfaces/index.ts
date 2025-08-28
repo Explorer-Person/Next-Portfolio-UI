@@ -8,3 +8,4 @@ export * from "./qualifications.interface";
 export * from "./socials.interface";
 export * from "./techStack.interface";
 export * from "./blogs.interface";
+export * from "./experiences.interface";

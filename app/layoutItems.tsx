@@ -24,22 +24,26 @@ export function Navbar() {
     }
     return (
         <header className={`bg-[var(--header-footer)] sticky top-0 z-50 w-full shadow-lg backdrop-blur`}>
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+            <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8 h-14 flex items-center ">
                 {/* Brand */}
                 <Link
                     href="/"
-                    className="font-ssNamemibold text-2xl tracking-wide text-stone-800"
+                    className="text-2xl w-[5%] tracking-wide text-stone-800"
                 >
-                    Fatih Etlik
+                    <img src="/logo.png" alt="" className="w-[80%]" />
                 </Link>
 
                 {/* Nav */}
                 <nav className="flex items-center gap-1">
+                    <NavItem href="/aboutme" label="ABOUT ME" />
                     <NavItem href="/projects" label="PROJECTS" />
                     <NavItem href="/blogs" label="BLOGS" />
                     <NavItem href="/contributions" label="CONTRIBUTIONS" />
-                    {isAuthed ? (
-                        <form action="/api/auth/logout" method="post">
+                    
+
+                </nav>
+                {isAuthed ? (
+                        <form action="/api/auth/logout" method="post" className="absolute right-4">
                             <button
                                 className="
                                     group inline-flex items-center gap-2
@@ -57,8 +61,6 @@ export function Navbar() {
                             </button>
                         </form>
                     ) : null}
-
-                </nav>
             </div>
         </header>
     );
@@ -70,7 +72,7 @@ export function NavItem({ href, label }: { href: string; label: string }) {
             href={href}
             className="px-3 py-1.5 rounded-md text-sm font-medium text-stone-800 hover:text-stone-700 hover:bg-white/10 transition"
         >
-            {label}
+            {label === "ABOUT ME" ? <span className="text-stone-1200 font-bold"> {label} </span> : label}
         </Link>
     );
 }

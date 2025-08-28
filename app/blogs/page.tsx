@@ -4,6 +4,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Blog } from "@/datas/interfaces";
+import { motion } from "framer-motion";
+import { getSectionAnim } from "@/utils/animation";
 
 
 
@@ -46,7 +48,7 @@ export default function BlogList() {
     return (
         <section className="w-full py-10">
             {/* Header */}
-            <div className="text-center mb-8">
+            <motion.div {...getSectionAnim({ direction: "", delay: 0.1 })} className="text-center mb-8">
                 <h1 className="text-4xl font-bold text-gray-900">Up To Tech News</h1>
                 <p className="text-gray-500 mt-2">
                     A blog about food, experiences, and recipes.
@@ -58,12 +60,13 @@ export default function BlogList() {
                         className="border rounded px-4 py-2 w-80 max-w-full"
                     />
                 </div>
-            </div>
+            </motion.div>
 
             {/* Blog grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
                 {blogs.map((blog) => (
-                    <div
+                    <motion.div
+                    {...getSectionAnim({ direction: "", delay: 0.2 })}
                         key={blog.id}
                         className="cursor-pointer group"
                         onClick={() => router.push(`/blogs/${blog.slug}`)}
@@ -105,7 +108,7 @@ export default function BlogList() {
 
                         {/* Excerpt */}
                         <p className="mt-1 text-sm text-gray-600">{blog.excerpt}</p>
-                    </div>
+                    </motion.div>
                 ))}
             </div>
         </section>

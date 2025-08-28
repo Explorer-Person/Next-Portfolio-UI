@@ -99,11 +99,12 @@ export default function ProjectsEditorComponent({ mode }: Readonly<PageProps>) {
 
         setBusy(true);
         try {
+            console.log(mode)
             const isEdit = mode;
             const url = isEdit === "update"
                 ? `/api/common/projects/${encodeURIComponent(payload.id)}`
                 : `/api/common/projects`;
-            const method = isEdit ? "PUT" : "POST";
+            const method = isEdit === "update" ? "PUT" : "POST";
 
             const res = await fetch(url, {
                 method,
