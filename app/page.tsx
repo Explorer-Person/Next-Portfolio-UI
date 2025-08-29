@@ -25,16 +25,16 @@ export default function Home() {
   };
 
   return (
-    <div className="relative font-sans min-h-screen text-stone-900 flex flex-col items-center">
+    <div className="relative overflow-hidden w-full md:overflow-visible font-sans min-h-screen text-stone-900 flex flex-col items-center">
       {/* Top Two-Column Grid */}
       <div className="gap-12 w-[100%]">
-        <div className="relative flex gap-8 h-[700px]">
+        <div className="relative flex gap-8 h-[200px] md:h-[700px]">
           <div className="relative h-full w-[100%]">
             {isAuthed && editableBox === "profileimage"
               ? <ProfileImageEditor initial={undefined} />
               : <ProfileImageBox canEdit={isAuthed} editableBox="profileimage" changeBoxState={changeBoxState} />}
 
-            <div className="h-full absolute top-0 left-10 w-[40%]">
+            <div className="h-full absolute top-0 left-3 md:left-10 w-[55%]">
               <ProfileTextBox />
             </div>
 
@@ -43,7 +43,7 @@ export default function Home() {
 
 
         <div className="h-0.5 w-full h-[650px] bg-[#F3F3F3] flex">
-          <div className="h-full w-full relative top-0 left-10">
+          <div className="h-full w-full relative top-0 left-0 md:left-10">
             {isAuthed && editableBox === "hero"
               ? <HeroEditor />
               : <HeroBox canEdit={isAuthed} editableBox="hero" changeBoxState={changeBoxState} />}
@@ -78,7 +78,7 @@ export default function Home() {
             <BlogsBox canEdit={isAuthed} editableBox="blogs" changeBoxState={changeBoxState} />
           </div>
         </div>
-        <div>
+        <div className="w-[95%] mx-[2.5%] md:mx-0 md:w-full">
           <QualificationsBox canEdit={isAuthed} />
         </div>
 
@@ -86,28 +86,60 @@ export default function Home() {
         <div className="my-25">
           <ContactUs />
         </div>
-        <div className="relative mt-5 flex h-[300px] gap-8 items-center">
-          <div className="relative h-full w-full">
-            {isAuthed && editableBox === "techstack"
-              ? <TechStackEditor editableBox="techstack" changeBoxState={changeBoxState} />
-              : <TechStackBox canEdit={isAuthed} editableBox="techstack" changeBoxState={changeBoxState} />}
+        <div
+          className="
+    relative mt-5
+    flex flex-col md:flex-row
+    gap-6 md:gap-8
+    items-stretch
+    h-auto md:h-[300px]
+  "
+        >
+          {/* LEFT: TechStack */}
+          <div className="w-[95%] mx-[2.5%] md:mx-0 md:w-full">
+            {isAuthed && editableBox === "techstack" ? (
+              <TechStackEditor editableBox="techstack" changeBoxState={changeBoxState} />
+            ) : (
+              <TechStackBox canEdit={isAuthed} editableBox="techstack" changeBoxState={changeBoxState} />
+            )}
           </div>
 
-          <div className="relative h-full w-full flex flex-col justify-center">
-            <div className="relative h-full">
-              <div className="relative h-full">
-                {isAuthed && editableBox === "contacts"
-                  ? <ContactsEditor editableBox="contacts" changeBoxState={changeBoxState} />
-                  : <ContactsBox canEdit={isAuthed} editableBox="contacts" changeBoxState={changeBoxState} />}
-                <div className="h-20 absolute bottom-0 text-center w-[100%]">
-                  {isAuthed && editableBox === "socials"
-                    ? <SocialsEditor editableBox="socials" changeBoxState={changeBoxState} />
-                    : editableBox === "contacts" ? <div /> : <SocialsBox canEdit={isAuthed} editableBox="socials" changeBoxState={changeBoxState} />}
+          {/* RIGHT: Contacts + Socials */}
+          <div className="relative w-full h-auto md:h-full flex flex-col justify-start md:justify-center">
+            <div className="relative h-auto md:h-full">
+              <div className="relative h-auto md:h-full">
+                {isAuthed && editableBox === "contacts" ? (
+                  <ContactsEditor editableBox="contacts" changeBoxState={changeBoxState} />
+                ) : (
+                  <ContactsBox canEdit={isAuthed} editableBox="contacts" changeBoxState={changeBoxState} />
+                )}
+
+                {/* Socials: static flow on mobile; absolute pinned on desktop */}
+                <div
+                  className="
+                            w-full text-center
+                            h-auto md:h-20
+                            mt-4 md:mt-0
+                            static md:absolute md:bottom-0
+                            "
+                >
+                  {isAuthed && editableBox === "socials" ? (
+                    <SocialsEditor editableBox="socials" changeBoxState={changeBoxState} />
+                  ) : editableBox === "contacts" ? (
+                    <div />
+                  ) : (
+                    <SocialsBox
+                      canEdit={isAuthed}
+                      editableBox="socials"
+                      changeBoxState={changeBoxState}
+                    />
+                  )}
                 </div>
               </div>
             </div>
           </div>
         </div>
+
       </div>
     </div>
 
@@ -133,50 +165,95 @@ function ProfileTextBox() {
 
 
   return (
-    <section className="relative p-10 text-center lg:text-left h-full">
-      <motion.div {...getSectionAnim({ direction: "", delay: 0.1 })} className="flex gap-25 h-full">
-        <div className="flex flex-col items-center gap-6 h-full">
+    <section className="relative h-full w-full overflow-hidden py-4 md:p-10 text-center md:text-left">
+      <motion.div
+        {...getSectionAnim({ direction: "", delay: 0.1 })}
+        className="
+      flex flex-col md:flex-row
+      items-start md:items-stretch
+      gap-6 md:gap-16 lg:gap-25
+      h-full max-w-screen-xl mx-auto
+    "
+      >
+        {/* Vertical meta (desktop only) */}
+        <div className="hidden md:flex md:flex-col md:items-center md:gap-6 md:h-full shrink-0">
           <p className="text-stone-500 font-semibold [writing-mode:vertical-rl] rotate-180">
             Full-Stack Dev.
           </p>
-
           <span className="w-[2px] h-[50%] flex-1 bg-gray-400"></span>
-
           <p className="text-stone-500 font-semibold [writing-mode:vertical-rl] rotate-180">
             2025
           </p>
         </div>
 
-        <div>
-          <div className="flex gap-15 mb-15">
-            <div>
-              <p className="text-6xl">+200</p>
-              <p className="ml-8">Project Completed</p>
+        {/* Main */}
+        <div className="w-full md:w-auto">
+          {/* KPIs */}
+          <div
+            className="
+    flex w-full
+    items-start
+    justify-between
+    gap-0 md:gap-10
+  "
+          >
+            <div className="flex-1 basis-1/2 min-w-0 text-center md:text-left">
+              <p className="text-2xl sm:text-5xl md:text-6xl leading-none">+200</p>
+              <p className="mt-1 w-[100%] text-xs sm:text-sm md:text-base">Project Completed</p>
             </div>
-            <div>
-              <p className="text-6xl">+50</p>
-              <p className="ml-8">Startup Raised</p>
+
+            <div className="flex-1 basis-1/2 min-w-0 text-center md:text-left">
+              <p className="text-2xl sm:text-5xl md:text-6xl leading-none">+50</p>
+              <p className="mt-1 text-xs sm:text-sm md:text-base">Startup Raised</p>
             </div>
           </div>
 
-
-          <h1 className="text-5xl sm:text-7xl md:text-[90px] lg:text-[110px] xl:text-[200px] font-thin tracking-tight leading-[1.1] mb-6">
+          {/* Title (desktop sizes unchanged) */}
+          <h1
+            className="
+          px-1.5 sm:px-2 md:px-0
+          text-4xl sm:text-7xl md:text-[90px] lg:text-[110px] xl:text-[200px]
+          font-thin tracking-tight
+          leading-tight md:leading-[1.1]
+          break-words hyphens-auto [text-wrap:balance]
+          mb-0 sm:mb-6
+        "
+          >
             {profileTexts.title}
           </h1>
 
-
-          <p className="flex items-center w-[75%] ml-5 gap-3 text-base md:text-xl text-gray-600 leading-relaxed">
-            <span className="block w-10 h-[2px] bg-gray-400"></span>
+          {/* Description */}
+          <p
+            className="
+          mx-auto md:mx-0
+          flex items-start md:items-center
+          justify-center md:justify-start
+          gap-3
+          w-full md:w-[75%] max-w-[70ch]
+          text-sm sm:text-base md:text-xl
+          text-gray-600 leading-relaxed
+        "
+          >
+            <span className="hidden sm:block w-10 h-[2px] mt-2 sm:mt-0 bg-gray-400"></span>
             {profileTexts.desc}
           </p>
 
-          <div className="mt-20 flex items-center justify-start ml-15 gap-2 text-lg font-medium text-stone-600">
+          {/* Scroll hint */}
+          <div
+            className="
+          mt-8 sm:mt-10 md:mt-20
+          flex items-center justify-center md:justify-start
+          gap-2
+          text-base sm:text-lg font-medium text-stone-600
+        "
+          >
             <span>Scroll Down</span>
             <ArrowDown className="w-5 h-5 animate-bounce" />
           </div>
         </div>
       </motion.div>
     </section>
+
   );
 }
 
@@ -204,12 +281,15 @@ function HeroBox({ editableBox, changeBoxState, canEdit }: StateProps) {
   const p3 = parts[2] ?? "";
 
   return (
-    <section className="relative p-10 text-center lg:text-left items-center justify-center h-full">
+    <section className="relative p-6 sm:p-8 lg:p-10 text-center lg:text-left items-center justify-center h-full">
       <div className="h-full">
         {/* Main 3-column layout */}
-        <div className="flex gap-10 lg:gap-5 h-full">
+        <div className="flex flex-col lg:flex-row gap-8 sm:gap-10 lg:gap-5 h-full">
           {/* LEFT: heading + intro paragraph */}
-          <motion.div {...getSectionAnim({ direction: "", delay: 0.2 })} className="order-2 lg:order-1 w-[25%] h-full">
+          <motion.div
+            {...getSectionAnim({ direction: "", delay: 0.2 })}
+            className="order-2 lg:order-1 w-full lg:w-[25%] h-full"
+          >
             {canEdit && (
               <button
                 onClick={() => changeBoxState(editableBox)}
@@ -219,7 +299,7 @@ function HeroBox({ editableBox, changeBoxState, canEdit }: StateProps) {
               </button>
             )}
 
-            <h2 className="text-3xl md:text-5xl font-semibold tracking-tight mb-4">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight mb-4">
               {heroTexts.title}
             </h2>
 
@@ -227,51 +307,65 @@ function HeroBox({ editableBox, changeBoxState, canEdit }: StateProps) {
               {p1}
             </p>
 
-            {/* Big title (optional; keep your original large title below if you want) */}
+            {/* Big title (kept hidden for a11y) */}
             <h1 className="sr-only">{heroTexts.title}</h1>
 
-            <div className="mt-10 w-[25%] flex items-center justify-center absolute bottom-15 lg:justify-start gap-2 text-lg font-medium text-stone-600">
-              <img src="/trendyarrow.png" alt="" className="rotate-180 w-full scale-x-[-1] ml-15" />
+            {/* Arrow — only show/position on desktop to avoid overlap on mobile */}
+            <div className="hidden lg:flex mt-10 w-[25%] items-center justify-start gap-2 text-lg font-medium text-stone-600 lg:absolute lg:bottom-15">
+              <img src="/trendyarrow.png" alt="" className="rotate-180 w-full scale-x-[-1] lg:ml-15" />
             </div>
           </motion.div>
 
           {/* MIDDLE: stat card (percent + caption + image) */}
-          <motion.div {...getSectionAnim({ direction: "", delay: 0.3 })} className="order-1 lg:order-2 w-[40%] relative h-full">
-            <div className="mx-auto max-w-sm rounded-2xl h-full w-[100%] bg-white shadow-md ring-1 ring-black/5 p-8 text-left">
-              <div className="flex items-center mb-5 justify-start">
-                <FaGlobe className="w-10 h-10 text-stone-600" />
+          <motion.div
+            {...getSectionAnim({ direction: "", delay: 0.3 })}
+            className="order-1 lg:order-2 w-full lg:w-[40%] relative h-full"
+          >
+            <div className="md:mx-auto w-full md:w-[65%] rounded-2xl bg-white shadow-md ring-1 ring-black/5 p-6 text-left h-full">
+              <div className="flex items-center mb-4 sm:mb-5 justify-start">
+                <FaGlobe className="w-8 h-8 sm:w-10 sm:h-10 text-stone-600" />
               </div>
-              <p className="text-5xl md:text-6xl font-semibold mb-5 tracking-tight">
+
+              <p className="text-5xl sm:text-6xl font-semibold mb-4 sm:mb-5 tracking-tight">
                 {"120%"}
               </p>
-              <p className="mt-2 text-gray-500">
-                {
-                  "Average increase in client engagement in the first 6 months"}
+
+              <p className="my-5 text-gray-500">
+                {"Average increase in client engagement in the first 6 months"}
               </p>
 
-              <div className="mt-6 overflow-hidden rounded-xl absolute bottom-10 w-80">
+              {/* Image: static flow on mobile/tablet; absolute on desktop as you had */}
+              <div className="mt-6 overflow-hidden rounded-xl w-full overflow-hidden static bottom-0">
                 <img
                   src={"/heromid.jpg"}
                   alt="stat"
-                  className="w-full h-56 object-cover"
+                  className="w-full h-48 sm:h-56 object-cover"
                 />
               </div>
             </div>
           </motion.div>
 
-          {/* RIGHT: three bullet paragraphs */}
-          <motion.div {...getSectionAnim({ direction: "", delay: 0.4 })} className="order-3 space-y-6 w-[30%] h-full">
-            <div className="overflow-hidden rounded-xl relative right-15 mb-15">
+          {/* RIGHT: image + two bullets */}
+          <motion.div
+            {...getSectionAnim({ direction: "", delay: 0.4 })}
+            className="order-3 w-full md:w-[30%] h-full"
+          >
+            {/* Top image: remove negative/absolute shift on mobile; keep your desktop offsets */}
+            <div className="overflow-hidden w-full rounded-xl relative md:right-15 mb-6 md:mb-15">
               <img
                 src={"/heroleft.jpeg"}
                 alt="stat"
                 className="w-full object-cover"
               />
             </div>
+
             {[p2, p3]
               .filter(Boolean)
               .map((text, i) => (
-                <div key={i} className="flex items-start gap-3 w-[70%] text-left">
+                <div
+                  key={i}
+                  className="flex items-start gap-3 w-full sm:w-[85%] lg:w-[70%] text-left mb-4"
+                >
                   <span className="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-black text-white">
                     <Star className="h-4 w-4" />
                   </span>
@@ -282,6 +376,7 @@ function HeroBox({ editableBox, changeBoxState, canEdit }: StateProps) {
         </div>
       </div>
     </section>
+
   );
 }
 
@@ -380,50 +475,66 @@ function ExperienceRow({ exp }: { exp: Experience }) {
   }
 
   return (
-    <motion.li {...getSectionAnim({ direction: "up", delay: 0.2 })} onClick={handleBoxClick} className="py-10 w-full first:pt-0 last:pb-0">
-      <div className="flex w-full gap-25 items-start justify-between">
-        <div className={`flex ${active ? 'flex-col' : ''}`}>
-          {/* Left: company + date */}
-          <div className="col-span-12 md:col-span-4">
-            <div className="text-2xl text-neutral-800">
-              {exp.company}
-              {exp.location ? `, ${exp.location}` : ""}
-            </div>
-            <div className="mt-1 text-sm text-neutral-500">• {date}</div>
+    <motion.li
+      {...getSectionAnim({ direction: "up", delay: 0.2 })}
+      onClick={handleBoxClick}
+      className="py-8 sm:py-9 md:py-10 w-full first:pt-0 last:pb-0"
+    >
+      {/* Top row */}
+      <div
+        className="
+          flex flex-col md:flex-row
+          gap-4 sm:gap-6 md:gap-10 lg:gap-25
+          w-full items-start md:items-start justify-between
+        "
+      >
+        {/* Left: company + date */}
+        <div className="w-full md:w-auto">
+          <div className="text-xl sm:text-2xl text-neutral-800">
+            {exp.company}
+            {exp.location ? `, ${exp.location}` : ""}
           </div>
-          {/* Middle: role + affairs */}
+          <div className="mt-1 text-xs sm:text-sm text-neutral-500">• {date}</div>
         </div>
 
-        <div className={`text-md text-neutral-500`}>
+        {/* Middle: role/job */}
+        <div className="text-sm sm:text-[15px] md:text-md text-neutral-500">
           {exp.job}
         </div>
 
-        <div className="flex flex-wrap gap-2 justify-end">
+        {/* Right: tags */}
+        <div className="flex flex-wrap gap-2 md:ml-auto">
           {(exp.tags || []).map((t) => (
             <Pill key={t}>{t}</Pill>
           ))}
         </div>
       </div>
-      <motion.div {...getSectionAnim({ direction: "", delay: 0.1 })}
-        className={`${active ? "flex" : "hidden"} w-full items-start gap-4 mt-4`}
+
+      {/* Expandable details */}
+      <motion.div
+        {...getSectionAnim({ direction: "", delay: 0.1 })}
+        className={`${active ? "flex" : "hidden"} w-full items-start gap-4 md:gap-6 mt-4 md:mt-5 flex-col md:flex-row`}
       >
         {/* Media (optional) */}
         {exp.medias?.length ? (
-          <div className="flex gap-4 shrink-0">
-            {exp.medias.slice(0, 3).map((src, i) => (
-              <img
-                key={i}
-                src={src}
-                alt={`media-${i}`}
-                className="h-36 w-56 rounded-xl object-cover shadow-sm"
-                loading="lazy"
-              />
-            ))}
+          // On mobile: horizontal scroll strip for medias; desktop keeps original row layout
+          <div className="w-full md:w-auto overflow-x-auto md:overflow-visible -mx-1 md:mx-0">
+            <div className="flex gap-3 md:gap-4 px-1 md:px-0 shrink-0">
+              {exp.medias.slice(0, 3).map((src, i) => (
+                <img
+                  key={i}
+                  src={src}
+                  alt={`media-${i}`}
+                  className="h-28 w-44 sm:h-32 sm:w-52 md:h-36 md:w-56 rounded-xl object-cover shadow-sm shrink-0"
+                  loading="lazy"
+                />
+              ))}
+            </div>
           </div>
         ) : null}
 
         {/* Middle text: EXPANDS */}
-        <div className="flex-1 min-w-0 text-[15px] leading-7 text-neutral-600">
+        <div className="flex-1 min-w-0 text-[14px] sm:text-[15px] leading-7 text-neutral-600">
           {exp.affairs || exp.job}
         </div>
 
@@ -431,12 +542,17 @@ function ExperienceRow({ exp }: { exp: Experience }) {
         <a
           href={exp.href || "#"}
           aria-label="Open"
-          className="shrink-0 ml-auto grid h-20 w-20 place-items-center rounded-full bg-neutral-900 text-white hover:bg-black/80 transition"
+          className="
+            shrink-0 md:ml-auto grid place-items-center
+            h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20
+            rounded-full bg-neutral-900 text-white hover:bg-black/80 transition
+          "
         >
-          <ArrowUpRight className="h-16 w-16" />
+          <ArrowUpRight className="h-8 w-8 sm:h-10 sm:w-10 md:h-16 md:w-16" />
         </a>
       </motion.div>
-      <div className="mt-8 h-px w-full bg-neutral-200" />
+
+      <div className="mt-6 sm:mt-7 md:mt-8 h-px w-full bg-neutral-200" />
     </motion.li>
   );
 }
@@ -444,27 +560,36 @@ function ExperienceRow({ exp }: { exp: Experience }) {
 // ===== Main component =====
 function ExperiencesBox({ data = SAMPLE_DATA }: { data?: Experience[] }) {
   return (
-    <section className="w-full py-10 text-neutral-900">
-      <motion.div {...getSectionAnim({ direction: "", delay: 0.1 })} className="mx-auto max-w-8xl md:px-25">
+    <section className="w-full py-8 sm:py-10 text-neutral-900">
+      <motion.div
+        {...getSectionAnim({ direction: "", delay: 0.1 })}
+        className="
+          mx-auto w-full
+          max-w-7xl px-4 sm:px-6 md:px-10
+          lg:max-w-8xl lg:px-25
+        "
+      >
         {/* Header */}
-        <div className="grid grid-cols-12 gap-6">
-          <div className="col-span-12 md:col-span-6">
-            <div className="text-md text-neutral-1000 "><span >⚫</span><span>Experiences</span></div>
-            <h1 className="mt-2 text-4xl md:text-5xl leading-tight tracking-tight">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          <div className="md:col-span-6">
+            <div className="text-sm sm:text-md text-neutral-1000">
+              <span>⚫</span><span className="ml-1">Experiences</span>
+            </div>
+            <h1 className="mt-2 text-3xl sm:text-4xl md:text-5xl leading-snug sm:leading-tight tracking-tight">
               Explore My Design
               <br />
               Journey
             </h1>
           </div>
-          <div className="col-span-12 md:col-span-6 md:pl-6">
-            <p className="text-[15px] leading-7 text-neutral-600 md:mt-2">
+          <div className="md:col-span-6 md:pl-6">
+            <p className="text-[14px] sm:text-[15px] leading-7 text-neutral-600 md:mt-2">
               Over the past 4+ years, I&apos;ve had the opportunity to work on a wide
               range of design projects, collaborating with diverse teams and
               clients to bring creative visions to life.
             </p>
             <a
               href="#"
-              className="mt-3 inline-block text-[15px] font-medium underline underline-offset-4 hover:opacity-80"
+              className="mt-3 inline-block text-[14px] sm:text-[15px] font-medium underline underline-offset-4 hover:opacity-80"
             >
               Book A Call ↗
             </a>
@@ -472,11 +597,10 @@ function ExperiencesBox({ data = SAMPLE_DATA }: { data?: Experience[] }) {
         </div>
 
         {/* Divider */}
-        <div className="mt-15 h-px w-full" />
-
+        <div className="mt-10 sm:mt-12 md:mt-15 h-px w-full" />
 
         {/* List */}
-        <ul className="w-full">
+        <ul className="w-full space-y-6 sm:space-y-8 md:space-y-10">
           {data.map((exp) => (
             <ExperienceRow key={exp.id} exp={exp} />
           ))}
@@ -585,10 +709,10 @@ function TechStackBox({ editableBox, changeBoxState, canEdit }: StateProps) {
         {techStack.map((s) => (
           <div
             key={s.name}
-            className="mx-auto inline-flex h-10 sm:h-20 w-28 sm:w-[180px] items-center justify-center rounded-full border-2 border-white/80 text-white/90 transition hover:border-white hover:bg-white/5"
+            className="mx-auto py-6 md:py-0 inline-flex h-10 sm:h-20 w-35 md:w-45 items-center justify-center rounded-full border-2 border-white/80 text-white/90 transition hover:border-white hover:bg-white/5"
           >
             <div className="relative mx-auto inline-flex items-center justify-center rounded-full text-white/90">
-              <span className="mr-2 inline-flex h-8 w-8 overflow-hidden rounded flex items-center justify-center">
+              <span className="mr-2 inline-flex h-6 w-6 md:h-8 md:w-8 overflow-hidden rounded flex items-center justify-center">
                 <img
                   src={`/api/media?url=${s.icon}`}
                   alt={`${s.name} icon`}
@@ -597,34 +721,62 @@ function TechStackBox({ editableBox, changeBoxState, canEdit }: StateProps) {
                 />
               </span>
               <div>
-                <div className="mt-2 text-xl tracking-wide">{s.name}</div>
-                <div className="text-md sm:text-md text-white/70">{s.level}</div>
+                <div className="mt-2 text-sm md:text-xl tracking-wide">{s.name}</div>
+                <div className="text-xs md:text-md text-white/70">{s.level}</div>
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Bottom solid block (only when collapsed AND overflow exists) */}
+      {/* Bottom solid block (collapsed + overflow) */}
       {!expanded && canExpand && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-[var(--background)] z-30" />
+        <div
+          className="
+      pointer-events-none absolute inset-x-0
+      bottom-0 z-30
+      h-12 sm:h-14 md:h-16
+      bg-[var(--background)]
+    "
+        />
       )}
 
-      {/* Fade effect (only when collapsed AND overflow exists) */}
+      {/* Fade effect (collapsed + overflow) */}
       {!expanded && canExpand && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-7 h-16 bg-gradient-to-t from-[var(--background)] via-[var(--background)]/95 to-transparent z-40" />
+        <div
+          className="
+      pointer-events-none absolute inset-x-0
+      z-40
+      bottom-6 sm:bottom-7
+      h-10 sm:h-12 md:h-16
+      bg-gradient-to-t
+      from-[var(--background)] via-[var(--background)]/95 to-transparent
+    "
+        />
       )}
 
-      {/* More / Show less (only if overflow exists) */}
+      {/* More / Show less */}
       {canExpand && (
         <button
           type="button"
-          onClick={() => setExpanded((v) => !v)}
-          className="absolute inset-x-0 bottom-0 h-7 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 bg-[var(--background)] text-black text-xs font-medium cursor-pointer transition-all duration-200 z-40"
+          aria-expanded={expanded}
+          onClick={() => setExpanded(v => !v)}
+          className="
+            absolute inset-x-0 bottom-0 z-40
+            h-8 sm:h-9
+            text-xs sm:text-sm font-medium
+            bg-[var(--background)] text-black
+            cursor-pointer transition-all duration-200
+            /* Mobile: always visible; Desktop: reveal on hover */
+            opacity-100 translate-y-0
+            md:opacity-0 md:translate-y-full
+            md:group-hover:opacity-100 md:group-hover:translate-y-0
+          "
         >
           {expanded ? "Show less" : "More"}
         </button>
       )}
+
     </motion.section>
   );
 }
@@ -643,7 +795,7 @@ function ProfileImageBox({ editableBox, changeBoxState, canEdit }: StateProps) {
       <img
         src={`/api/media?url=${profileImage?.src}`} // Replace with your actual image path
         alt="Fatih Etlik"
-        className="absolute h-[100%] w-[55%] right-0 bottom-0"
+        className="absolute w-[55%] right-0 bottom-0  md:h-[100%] md:w-[55%] md:right-0 md:bottom-0"
       />
 
       {/* Floating Badge */}
@@ -728,7 +880,7 @@ function ContactsBox({ editableBox, changeBoxState, canEdit }: StateProps) {
 
 
   return (
-    <motion.section {...getSectionAnim({ direction: "up", delay: 0.2 })} className="relative h-full bg-[url('/addressback.jpeg')] p-6 px-30 space-y-8 pb-8 rounded-xl shadow-lg text-center">
+    <motion.section {...getSectionAnim({ direction: "up", delay: 0.2 })} className="relative flex flex-col items-center h-full bg-[url('/addressback.jpeg')] p-6 space-y-8 pb-8 rounded-xl shadow-lg text-center">
       {/* Floating Edit Badge */}
       {
         canEdit && (
@@ -753,10 +905,12 @@ function ContactsBox({ editableBox, changeBoxState, canEdit }: StateProps) {
         return (
           <div
             key={item.id ?? `${item.label}-${item.value}`}
-            className="flex items-center justify-center gap-4"
+            className="flex items-start justify-start gap-5"
           >
-            <Icon size={28} />
-            <span className="text-lg break-all">{item.value}</span>
+            <Icon size={28} className="shrink-0" />
+            <span className="min-w-0 flex items-start text-right text-lg truncate">
+              {item.value}
+            </span>
           </div>
         );
       })}
@@ -794,47 +948,72 @@ function QualificationsBox({ canEdit }: { canEdit?: boolean }) {
 
 
   return (
-    <motion.section {...getSectionAnim({ direction: "", delay: 0.1 })} className="relative h-full bg-[url('/qualback.jpg')] bg-cover bg-center bg-no-repeat overflow-hidden rounded-xl">
-      <div className="absolute inset-0 bg-white/80" aria-hidden="true" />
-      <div className="relative w-[100%] overflow-hidden rounded-2xl shadow-lg">
+    <motion.section
+      {...getSectionAnim({ direction: "", delay: 0.1 })}
+      className="
+    relative h-full overflow-hidden rounded-xl
+    bg-[url('/qualback.jpg')] bg-cover bg-center bg-no-repeat
+  "
+    >
+      {/* Legibility veil: a bit lighter on desktop */}
+      <div className="absolute inset-0 bg-white/75 md:bg-white/80" aria-hidden="true" />
+
+      <div className="relative w-full overflow-hidden rounded-2xl shadow-lg">
         {/* Floating Edit Badge */}
-        {
-          canEdit && (
-            <button
-              onClick={() => router.push("/qualifications/create")}
-              className="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/20 text-white px-4 py-1 rounded-full text-sm font-medium backdrop-blur-sm transition"
-            >
-              ✏️ Add Qualification
-            </button>
-          )
-        }
+        {canEdit && (
+          <button
+            onClick={() => router.push("/qualifications/create")}
+            className="
+          absolute top-3 right-3 md:top-4 md:right-4 z-10
+          bg-black/50 hover:bg-black/20 text-white
+          px-3 py-1 md:px-4 md:py-1
+          rounded-full text-xs md:text-sm font-medium
+          backdrop-blur-sm transition
+        "
+          >
+            ✏️ Add Qualification
+          </button>
+        )}
 
         {/* Title */}
-        <h2 className="px-6 pt-8 text-center text-2xl md:text-5xl font-semibold text-black">
+        <h2 className="px-4 sm:px-6 pt-6 sm:pt-8 text-center text-xl sm:text-3xl md:text-5xl font-semibold text-black">
           Certifications & Education
         </h2>
 
         {/* Content */}
-        <div className="grid gap-8 px-6 pb-10 pt-12 md:flex md:gap-12 md:px-12">
+        <div
+          className="
+        grid grid-cols-1 gap-6 sm:gap-8
+        px-4 sm:px-6 pt-8 sm:pt-10 pb-8 sm:pb-10
+        md:flex md:gap-12 md:px-12
+      "
+        >
           {/* Left — Certifications */}
-          <div className="flex w-[100%] flex-col items-center gap-6 md:justify-self-end">
+          <div className="flex w-full flex-col items-center gap-5 sm:gap-6 md:justify-self-end">
             {certs.map((item) => (
-              <div key={item.title} className="flex items-center justify-center w-[100%] gap-4">
-                <div className="grid relative group h-14 w-14 place-items-center rounded-xl bg-black/90 shadow">
-                  <div className="absolute top-0 right-5 z-20 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-                    <button
-                      className="px-2 py-1 text-xs rounded bg-black/80 hover:bg-black text-stone-200 shadow"
-                      onClick={() => toUpdate(item._id as string)}
-                    >
-                      ✏️
-                    </button>
-                    <button
-                      className="px-2 py-1 text-xs rounded bg-rose-500/80 hover:bg-rose-600 text-white shadow"
-                      onClick={() => toDelete(item._id as string)}
-                    >
-                      🗑️
-                    </button>
+              <div key={item.title} className="flex items-center justify-center w-full gap-3 sm:gap-4">
+                <div className="grid relative group h-12 w-12 sm:h-14 sm:w-14 place-items-center rounded-xl bg-black/90 shadow">
+                  {/* Touch: show controls; Desktop: reveal on hover */}
+                  <div className={`${canEdit ? "opacity-100 md:opacity-0 md:group-hover:opacity-100" : "hidden"
+                    } absolute -top-2 right-0 z-20 flex gap-1 transition-opacity`}>
+                    {canEdit && (
+                      <>
+                        <button
+                          className="px-2 py-1 text-[11px] sm:text-xs rounded bg-black/80 hover:bg-black text-stone-200 shadow"
+                          onClick={() => toUpdate(item._id as string)}
+                        >
+                          ✏️
+                        </button>
+                        <button
+                          className="px-2 py-1 text-[11px] sm:text-xs rounded bg-rose-500/80 hover:bg-rose-600 text-white shadow"
+                          onClick={() => toDelete(item._id as string)}
+                        >
+                          🗑️
+                        </button>
+                      </>
+                    )}
                   </div>
+
                   {item.logo ? (
                     <Image
                       src={`/api/media?url=${item.logo}`}
@@ -849,10 +1028,10 @@ function QualificationsBox({ canEdit }: { canEdit?: boolean }) {
                 </div>
 
                 <div className="text-black">
-                  <div className="text-base md:text-lg font-semibold leading-tight">
+                  <div className="text-sm sm:text-base md:text-lg font-semibold leading-tight">
                     {item.title}
                   </div>
-                  <div className="mt-1 flex flex-wrap items-center gap-2 text-xs md:text-sm text-black/80">
+                  <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px] sm:text-xs md:text-sm text-black/80">
                     <span>{item.org}</span>
                     <span>•</span>
                     <span>{item.year}</span>
@@ -870,31 +1049,38 @@ function QualificationsBox({ canEdit }: { canEdit?: boolean }) {
             ))}
           </div>
 
-
           {/* Right — Education */}
-          <div className="flex w-[75%] shadow-lg bg-white/50 rounded-xl py-3 flex-col items-center gap-6 md:justify-self-start">
+          <div
+            className="
+          flex w-full md:w-[75%]
+          bg-white/70 md:bg-white/50
+          rounded-xl py-2 sm:py-3
+          flex-col items-center gap-5 sm:gap-6 md:justify-self-start shadow-lg
+        "
+          >
             {edus.map((item) => (
-              <div key={item.title} className="flex w-[100%] justify-center items-center gap-4">
-                <div className="relative group h-14 w-14 rounded-full bg-white/95 shadow">
-
-                  {
-                    canEdit && (
-                      <div className="absolute top-0 right-5 z-20 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+              <div key={item.title} className="flex w-full justify-center items-center gap-3 sm:gap-4 px-2 sm:px-0">
+                <div className="relative group h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-white/95 shadow">
+                  {/* Touch: show controls; Desktop: reveal on hover */}
+                  <div className={`${canEdit ? "opacity-100 md:opacity-0 md:group-hover:opacity-100" : "hidden"
+                    } absolute -top-2 right-0 z-20 flex gap-1 transition-opacity`}>
+                    {canEdit && (
+                      <>
                         <button
-                          className="px-2 py-1 text-xs rounded bg-black/80 hover:bg-black text-stone-200 shadow"
+                          className="px-2 py-1 text-[11px] sm:text-xs rounded bg-black/80 hover:bg-black text-stone-200 shadow"
                           onClick={() => toUpdate(item._id as string)}
                         >
                           ✏️
                         </button>
                         <button
-                          className="px-2 py-1 text-xs rounded bg-rose-500/80 hover:bg-rose-600 text-white shadow"
+                          className="px-2 py-1 text-[11px] sm:text-xs rounded bg-rose-500/80 hover:bg-rose-600 text-white shadow"
                           onClick={() => toDelete(item._id as string)}
                         >
                           🗑️
                         </button>
-                      </div>
-                    )
-                  }
+                      </>
+                    )}
+                  </div>
 
                   {item.logo ? (
                     <Image src={`/api/media?url=${item.logo}`} alt={item.org as string} fill className="object-contain p-1" />
@@ -904,10 +1090,10 @@ function QualificationsBox({ canEdit }: { canEdit?: boolean }) {
                 </div>
 
                 <div className="text-black">
-                  <div className="text-base md:text-lg font-semibold leading-tight">
+                  <div className="text-sm sm:text-base md:text-lg font-semibold leading-tight">
                     {item.title}
                   </div>
-                  <div className="mt-1 flex flex-wrap items-center gap-2 text-xs md:text-sm text-black/80">
+                  <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px] sm:text-xs md:text-sm text-black/80">
                     <span>{item.org}</span>
                     <span>•</span>
                     <span>{item.year}</span>
@@ -1001,7 +1187,7 @@ function ContributionsBox({ editableBox, changeBoxState, canEdit }: StateProps) 
         <div className="mx-auto max-w-7xl py-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {visible.slice(0, 3).map((doc, index) => (
-              <motion.div {...getSectionAnim({ direction: "up", delay: ((1 + index)/10) })} key={doc.id ?? doc.slug ?? doc.href} className="group">
+              <motion.div {...getSectionAnim({ direction: "up", delay: ((1 + index) / 10) })} key={doc.id ?? doc.slug ?? doc.href} className="group">
                 <a
                   href={doc.href}
                   className="block relative overflow-hidden rounded-xl ring-1 ring-black/5 shadow-md"
@@ -1165,7 +1351,7 @@ function ProjectsBox({ editableBox, changeBoxState, canEdit }: StateProps) {
 
   return (
     <section className="w-full bg-[#F3F3F3]">
-      <div className="relative container mx-auto px-6">
+      <div className="relative container mx-auto px-4 sm:px-6">
         {/* Floating Edit Badge */}
         {canEdit && (
           <button
@@ -1177,19 +1363,21 @@ function ProjectsBox({ editableBox, changeBoxState, canEdit }: StateProps) {
         )}
 
         {/* Title */}
-        <h2 className="text-center text-3xl md:text-4xl font-semibold mb-12 text-[var(--heading-color)]">
+        <h2 className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold mb-8 md:mb-12 text-[var(--heading-color)]">
           Latest Projects
         </h2>
 
-        {/* Buttons */}
-        <div className="absolute w-[100%] left-0 top-1/2 -translate-y-1/2 z-10 flex gap-2">
-          <motion.button {...getSectionAnim({ direction: "left", delay: 0.1 })}
+        {/* Desktop Buttons (unchanged) */}
+        <div className="hidden md:absolute w-full left-0 top-1/2 -translate-y-1/2 z-10 md:flex gap-2">
+          <motion.button
+            {...getSectionAnim({ direction: "left", delay: 0.1 })}
             onClick={() => changePositioning("left")}
             className="h-10 absolute left-5 w-10 rounded-full bg-black/70 text-white flex items-center justify-center"
           >
             ◀
           </motion.button>
-          <motion.button {...getSectionAnim({ direction: "right", delay: 0.1 })}
+          <motion.button
+            {...getSectionAnim({ direction: "right", delay: 0.1 })}
             onClick={() => changePositioning("right")}
             className="h-10 w-10 absolute right-5 rounded-full bg-black/70 text-white flex items-center justify-center"
           >
@@ -1197,30 +1385,49 @@ function ProjectsBox({ editableBox, changeBoxState, canEdit }: StateProps) {
           </motion.button>
         </div>
 
-        {/* Grid wrapper with translateX */}
-        <div className="overflow-hidden w-full">
+        {/* Grid wrapper */}
+        <motion.div
+          {...getSectionAnim({ direction: "", delay: 0.2 })}
+          className="overflow-hidden w-full">
           <div
-            className="flex gap-[10%] transition-transform duration-500 ease-out will-change-transform"
-            style={{ transform: `translateX(calc(23.5% - 65% * ${scrollIndex}))` }}
+            /* On mobile: vertical list, no translate.
+               From md+: apply translateX using a CSS var to keep desktop math intact. */
+            className="
+                    flex flex-col md:flex-row
+                    gap-6 sm:gap-8 md:gap-[10%]
+                    transition-transform duration-500 ease-out will-change-transform
+                    md:[transform:translateX(var(--tx))]
+                  "
+            style={
+              {
+                // keeps your original formula for md+; mobile ignores due to no transform class
+                "--tx": `calc(23.5% - 65% * ${scrollIndex})`,
+              } as React.CSSProperties
+            }
           >
             {projects?.map((project) => (
-              <motion.div {...getSectionAnim({ direction: "", delay: 0.2 })}
+              <motion.div
+                {...getSectionAnim({ direction: "", delay: 0.2 })}
+                // ensure it animates when partially visible and re-triggers
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: false, amount: 0.1, margin: "120px 0px 120px 0px" }}
                 key={project.title}
                 onClick={() => router.push(`/projects?id=${project._id}`)}
                 className="
-                  lg:min-w-[55%] 
-                  group cursor-pointer overflow-hidden rounded-xl
-                  transition-all duration-300
-                "
+                    group cursor-pointer overflow-hidden rounded-xl
+                    transition-all duration-300
+                    w-full md:min-w-[55%]
+                  "
               >
                 {/* Image */}
-                <div className="relative h-[65%]">
+                <div className="relative md:h-100">
                   <img
                     src={project.coverImage}
                     alt={project.title}
-                    className="w-full aspect-[4/3] h-full object-cover"
+                    className="w-full h-full aspect-[4/3] object-cover"
                   />
-                  {/* Circular hover button */}
+                  {/* Circular hover button (kept) */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <span className="pointer-events-none flex h-12 w-12 items-center justify-center rounded-full bg-black/80 text-white shadow-lg">
                       <ArrowUpRight className="h-5 w-5" />
@@ -1229,13 +1436,13 @@ function ProjectsBox({ editableBox, changeBoxState, canEdit }: StateProps) {
                 </div>
 
                 {/* Caption */}
-                <div className="bg-[var(--card-bg,#F4F4F3)] px-5 py-4">
+                <div className="bg-[var(--card-bg,#F4F4F3)] px-4 sm:px-5 py-3 sm:py-4">
                   <div className="flex items-baseline justify-between gap-3">
-                    <h3 className="text-[35px] font-medium text-stone-900 line-clamp-1">
+                    <h3 className="text-2xl sm:text-[28px] md:text-[35px] font-medium text-stone-900 line-clamp-1">
                       {project.title}
                     </h3>
                     {project.href && (
-                      <p className="text-sm text-stone-500 shrink-0">
+                      <p className="text-xs sm:text-sm text-stone-500 shrink-0">
                         For <span className="font-medium">{project.href}</span>
                       </p>
                     )}
@@ -1244,7 +1451,7 @@ function ProjectsBox({ editableBox, changeBoxState, canEdit }: StateProps) {
               </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -1285,7 +1492,7 @@ function BlogsBox({ editableBox, changeBoxState, canEdit }: StateProps) {
         <div className="mx-auto max-w-7xl mt-12">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogs?.slice(0, 3).map((p, index) => (
-              <motion.a {...getSectionAnim({ direction: "up", delay: ((index + 1)/10) })}
+              <motion.a {...getSectionAnim({ direction: "up", delay: ((index + 1) / 10) })}
                 key={p.id ?? p.slug ?? p.title}
                 href={`/blogs/${p.slug}`}
                 className="group block rounded-2xl bg-white ring-1 ring-black/5 shadow-[0_8px_30px_rgba(0,0,0,0.10)] overflow-hidden transition-transform duration-300 hover:-translate-y-1"

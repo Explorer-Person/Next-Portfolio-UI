@@ -163,7 +163,7 @@ function ProjectCard({ project, onOpen }: { project: Project; onOpen: () => void
     return (
         <motion.article
             {...getSectionAnim({ direction: "", delay: 0.2 })}
-            className="card group relative w-[45%] overflow-hidden cursor-pointer transition-transform hover:-translate-y-0.5"
+            className="card group relative w-[100%] md:w-[47.5%] overflow-hidden cursor-pointer transition-transform hover:-translate-y-0.5"
             onClick={onOpen}
             role="button"
             aria-label={`Open ${project.title}`}
@@ -225,23 +225,27 @@ function DetailOverlay({ project, onClose, updateItem, deleteItem }: Readonly<{ 
 
     return (
         <motion.div
-        {...getSectionAnim({ direction: "up", delay: 0.1 })}
-            className="fixed inset-0 z-50 bg-white/50
-                flex items-center justify-center mc-15"
+            {...getSectionAnim({ direction: "up", delay: 0.1 })}
+            className="
+    fixed inset-0 z-50 bg-white/50 backdrop-blur-sm
+    flex items-center justify-center
+    p-3 sm:p-6
+  "
             aria-modal="true"
             role="dialog"
         >
             <div className="w-full max-w-5xl">
-                <div className="card overflow-hidden !bg-white text-stone-900 rounded-2xl shadow-xl">
+                <div className="card overflow-hidden !bg-white text-stone-900 rounded-2xl shadow-xl
+                    max-h-[90vh] sm:max-h-[92vh] overflow-y-auto">
                     {/* Header */}
-                    <div className="flex items-center justify-between gap-3 p-4 border-b border-stone-200">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 border-b border-stone-200">
                         <div className="min-w-0">
-                            <h2 className="text-2xl leading-tight">{project.title}</h2>
+                            <h2 className="text-xl sm:text-2xl leading-tight break-words">{project.title}</h2>
                             {project.slug && (
-                                <div className="opacity-70 text-xs">/{project.slug}</div>
+                                <div className="opacity-70 text-xs break-all">/{project.slug}</div>
                             )}
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center flex-wrap gap-2">
                             {Number.isFinite(project.priority) && (
                                 <span className="rounded-full bg-stone-100 px-3 py-1 text-xs font-medium text-stone-700">
                                     Priority {project.priority}
@@ -271,7 +275,7 @@ function DetailOverlay({ project, onClose, updateItem, deleteItem }: Readonly<{ 
                                             <img
                                                 src={`/api/media?url=${src}`}
                                                 alt={`${project.title} media ${i + 1}`}
-                                                className="h-72 w-full object-cover md:h-[14rem]"
+                                                className="w-full object-cover h-56 sm:h-64 md:h-[14rem] lg:h-72"
                                                 loading="lazy"
                                             />
                                         </div>
@@ -285,7 +289,7 @@ function DetailOverlay({ project, onClose, updateItem, deleteItem }: Readonly<{ 
                                             type="button"
                                             onClick={prev}
                                             aria-label="Previous image"
-                                            className="absolute left-3 top-1/2 -translate-y-1/2 grid h-10 w-10 place-items-center rounded-full bg-white/90 text-stone-900 shadow hover:bg-white"
+                                            className="absolute left-3 top-1/2 -translate-y-1/2 grid h-9 w-9 sm:h-10 sm:w-10 place-items-center rounded-full bg-white/90 text-stone-900 shadow hover:bg-white"
                                         >
                                             ‹
                                         </button>
@@ -293,7 +297,7 @@ function DetailOverlay({ project, onClose, updateItem, deleteItem }: Readonly<{ 
                                             type="button"
                                             onClick={next}
                                             aria-label="Next image"
-                                            className="absolute right-3 top-1/2 -translate-y-1/2 grid h-10 w-10 place-items-center rounded-full bg-white/90 text-stone-900 shadow hover:bg-white"
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 grid h-9 w-9 sm:h-10 sm:w-10 place-items-center rounded-full bg-white/90 text-stone-900 shadow hover:bg-white"
                                         >
                                             ›
                                         </button>
@@ -308,7 +312,7 @@ function DetailOverlay({ project, onClose, updateItem, deleteItem }: Readonly<{ 
                                                 key={i}
                                                 aria-label={`Go to slide ${i + 1}`}
                                                 onClick={() => setSlideIndex(i)}
-                                                className={`h-2.5 w-2.5 rounded-full transition ${i === slideIndex ? "bg-stone-900" : "bg-stone-300 hover:bg-stone-400"
+                                                className={`h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full transition ${i === slideIndex ? "bg-stone-900" : "bg-stone-300 hover:bg-stone-400"
                                                     }`}
                                             />
                                         ))}
@@ -319,15 +323,15 @@ function DetailOverlay({ project, onClose, updateItem, deleteItem }: Readonly<{ 
                     </div>
 
                     {/* Body */}
-                    <div className="grid gap-4 px-4 pb-5 md:grid-cols-3">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 px-4 pb-5">
                         <div className="md:col-span-2">
-                            <h3 className="mb-2 text-lg font-bold">About this project</h3>
+                            <h3 className="mb-2 text-base sm:text-lg font-bold">About this project</h3>
                             <p className="leading-relaxed opacity-90">
                                 {project.description || "No description provided."}
                             </p>
                         </div>
                         <div className="md:col-span-1">
-                            <h3 className="mb-2 text-lg font-bold">Links & meta</h3>
+                            <h3 className="mb-2 text-base sm:text-lg font-bold">Links & meta</h3>
                             <div className="flex flex-wrap gap-2">
                                 {project.prodLink && (
                                     <a
@@ -367,7 +371,7 @@ function DetailOverlay({ project, onClose, updateItem, deleteItem }: Readonly<{ 
                                 </>
                             ) : null}
 
-                            <div className="mt-4 text-xs opacity-70">
+                            <div className="mt-4 text-xs opacity-70 space-y-0.5">
                                 <div>FK: {project.fk}</div>
                                 {project.createdAt && (
                                     <div>Created: {new Date(project.createdAt).toLocaleString()}</div>
@@ -380,31 +384,29 @@ function DetailOverlay({ project, onClose, updateItem, deleteItem }: Readonly<{ 
                     </div>
 
                     {/* Footer buttons */}
-                    {
-                        isAuthed ? (
-                            <div className="flex gap-3 px-4 pb-5">
-                                <button
-                                    value={project._id}
-                                    onClick={deleteItem}
-                                    className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold shadow transition-all duration-200"
-                                >
-                                    Delete
-                                </button>
+                    {isAuthed ? (
+                        <div className="flex flex-wrap gap-3 px-4 pb-5 justify-end sm:justify-start">
+                            <button
+                                value={project._id}
+                                onClick={deleteItem}
+                                className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold shadow transition-all duration-200"
+                            >
+                                Delete
+                            </button>
 
-                                <button
-                                    value={project._id}
-                                    onClick={updateItem}
-                                    className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow transition-all duration-200"
-                                >
-                                    Update
-                                </button>
-                            </div>
-                        ) : null
-                    }
-
+                            <button
+                                value={project._id}
+                                onClick={updateItem}
+                                className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow transition-all duration-200"
+                            >
+                                Update
+                            </button>
+                        </div>
+                    ) : null}
                 </div>
             </div>
         </motion.div>
+
     );
 }
 

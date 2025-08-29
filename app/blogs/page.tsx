@@ -68,7 +68,7 @@ export default function BlogList() {
                     <motion.div
                     {...getSectionAnim({ direction: "", delay: 0.2 })}
                         key={blog.id}
-                        className="cursor-pointer group"
+                        className="cursor-pointer group mx-5"
                         onClick={() => router.push(`/blogs/${blog.slug}`)}
                     >
                         {/* Cover image */}
